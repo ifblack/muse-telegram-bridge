@@ -1,3 +1,5 @@
+[English](README.en.md) | 中文
+
 # Muse × Telegram：把 Muse 接到 Telegram 的平替方案
 
 > Meta 的个人 AI 助手 **Muse** 目前只支持 WhatsApp 作为第三方聊天通道，
@@ -158,7 +160,7 @@ python3 tg.py send-quote <chat_id> "💬 你在 Muse 里说" "<原文>"
 | 文件 | 说明 |
 |------|------|
 | `tg.py` | 收发 CLI（真机验证过，2026-10-03） |
-| `cron-example.md` | 轮询任务配置示例 |
+| `cron-example.md` / `cron-example.en.md` | 轮询任务配置示例（中文 / 英文） |
 | `state.example.json` | 状态文件示例 |
 | `.gitignore` | 提醒：真 state/transcript 不要提交 |
 
