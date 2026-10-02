@@ -1,0 +1,6 @@
+# 真实运行状态不要提交：里面有你的 chat_id 和对话记录
+state*.json
+!state.example.json
+transcript/
+*.log
+__pycache__/
