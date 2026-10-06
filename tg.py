@@ -10,6 +10,7 @@ token 以 hsurr: 形式存在于发出的请求中，绝不打印、不落盘。
   tg.py poll --state <state.json>              # 拉新消息（JSON），推进 offset
   tg.py send <chat_id> <text>                  # 发消息，超 4000 字自动分段
   tg.py send-quote <chat_id> <label> <text>    # 发引用框消息（HTML），用于区分身份
+  tg.py typing <chat_id>                       # 发"正在输入…"状态（约 5 秒，需定时刷新）
 
   send-quote 示例：把 side chat 里用户说的话同步到 Telegram 时，
   用 label="💬 你在 Muse 里说" 包成引用框，和机器人自己的回复视觉区分。
@@ -149,6 +150,17 @@ def cmd_send(chat_id: str, text: str, parse_mode: str | None = None) -> None:
     print(json.dumps({"ok": True, "parts": len(parts)}, ensure_ascii=False))
 
 
+def cmd_typing(chat_id: str) -> None:
+    """发"正在输入…"状态。Telegram 每次只显示约 5 秒，
+    回复准备时间长的话要定时重发一次。"""
+    try:
+        cid = int(chat_id)
+    except ValueError:
+        raise SystemExit(f"chat_id 非法: {chat_id}")
+    call("sendChatAction", {"chat_id": cid, "action": "typing"})
+    print(json.dumps({"ok": True}, ensure_ascii=False))
+
+
 def _html_escape(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -177,6 +189,10 @@ def main(argv: list[str]) -> None:
         if len(argv) != 5:
             raise SystemExit("用法: tg.py send-quote <chat_id> <label> <text>")
         cmd_send_quote(argv[2], argv[3], argv[4])
+    elif cmd == "typing":
+        if len(argv) != 3:
+            raise SystemExit("用法: tg.py typing <chat_id>")
+        cmd_typing(argv[2])
     else:
         raise SystemExit(f"未知命令: {cmd}")
 
